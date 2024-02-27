@@ -73,18 +73,18 @@ replaceAt (h:t) n newVal
     | otherwise = h : replaceAt t (n-1) newVal
 
 -- check if there are at least 4 in a row of token in list
-checkNLine :: Token -> Int -> [Token] -> Bool -- input token turn + line to check (line is a list that represents row/column/diagonal)
-checkNLine token n line =
-    any (\group -> length group >= n && head group == token) (group line) -- group consecutive tokens, if there are at least 4 in a row + same as token turn then win
+checkLineWin :: Token -> [Token] -> Bool -- input token turn + line to check (line is a list that represents row/column/diagonal)
+checkLineWin token line =
+    any (\group -> length group >= 4 && head group == token) (group line) -- group consecutive tokens, if there are at least 4 in a row + same as token turn then win
 
 -- evaluate if state is a winning state
 win :: Int -> Token -> [[Token]] -> Bool -- input column + token
 win column_index playerToken board = 
-    let columnWin = checkNLine playerToken 4 (board!!column_index)      -- check if at least 4 in a row of playerToken in last played column
+    let columnWin = checkLineWin playerToken (board!!column_index)      -- check if at least 4 in a row of playerToken in last played column
         row_index = (length (filter (/= (TokenEmpty '_')) (board!!column_index)) - 1) -- find row index by finding row last played token fell into
-        rowWin = checkNLine playerToken 4 ((transpose board)!!row_index) -- check if at least 4 in a row of playerToken in last played row
-        diagLWin = checkNLine playerToken 4 ((leftToRightDiagonals board)!!(column_index + row_index))
-        diagRWin = checkNLine playerToken 4((rightToLeftDiagonals board)!!(boardSizeY - 1 - row_index + column_index))
+        rowWin = checkLineWin playerToken ((transpose board)!!row_index) -- check if at least 4 in a row of playerToken in last played row
+        diagLWin = checkLineWin playerToken ((leftToRightDiagonals board)!!(column_index + row_index))
+        diagRWin = checkLineWin playerToken ((rightToLeftDiagonals board)!!(boardSizeY - 1 - row_index + column_index))
     in or[columnWin, rowWin, diagLWin, diagRWin]
 
 -- Function to get all the diagonals of the board in this direction \\\\\\
