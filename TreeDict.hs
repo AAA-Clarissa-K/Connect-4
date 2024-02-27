@@ -10,15 +10,12 @@ module TreeDict
    show
    ) where
 
--- To run it, try:
--- ghci
--- :load TreeDict
+-- Implementation largely from CPSC312 lecture w/ David Poole
 
 -- a binary search tree where k is the type of key, and v is type of value
 data BSTree k v = BSEmpty | BSNode k v (BSTree k v) (BSTree k v)
- --      deriving (Show)
+
 instance (Show k, Show v) => Show (BSTree k v) where
-   --show t = "dict"    -- don't print the dictionary
    show BSEmpty = ""
    show (BSNode k v t1 t2) = show t1 ++ show k ++ ": " ++ show v ++ "\n" ++ show t2
 
@@ -40,7 +37,6 @@ getval key (BSNode kt val l r)
     | otherwise = getval key r
 getval _ BSEmpty = Nothing
 
--- Try:
 -- getval 3 test_tree
 -- getval 7 test_tree
 
@@ -55,7 +51,7 @@ insertval key val (BSNode kt vt l r)
 -- insertval 7 "test" test_tree
 
 update_tree:: (Ord k) => k -> (Maybe v -> v) -> Dict k v -> Dict k v
--- update_tree key fun dict = new tree with value for key updated by fun value
+-- tree's key should now be updated by value
 update_tree key fun BSEmpty = BSNode key (fun Nothing) BSEmpty BSEmpty
 update_tree key fun (BSNode kt vt l r)
      | key==kt = BSNode kt (fun (Just vt)) l r   -- replace value
