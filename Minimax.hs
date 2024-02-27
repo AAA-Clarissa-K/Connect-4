@@ -51,8 +51,8 @@ argmax_mem f [act] mem = ((act,val),mem1)
 argmax_mem f (h:t) mem
    | fh > ft = ((h,fh),mem2)
    | fh < ft = ((bt,ft),mem2)
-   | otherwise = if randomBool then ((h,fh),mem2) else ((bt,ft),mem2)   -- 50/50 chance of picking equal options
-                                                                        -- otherwise always chooses largest column option
+   | otherwise = if randomBool then ((h,fh),mem2) else ((bt,ft),mem2)   -- 50/50 chance of picking equal options since
+                                                                        -- it would otherwise default to choosing largest column option
    where
       ((bt,ft),mem1) = argmax_mem f t mem
       (fh,mem2) = f h mem1
